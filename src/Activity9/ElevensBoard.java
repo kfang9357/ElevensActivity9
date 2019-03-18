@@ -55,8 +55,14 @@ public class ElevensBoard extends Board {
      */
     @Override
     public boolean isLegal(List<Integer> selectedCards) {
-
-    }
+            if (selectedCards.size() == 2) {
+                return containsPairSum11(selectedCards);
+            } else if (selectedCards.size() == 3) {
+                return containsJQK(selectedCards);
+            } else {
+                return false;
+            }
+        }
 
     /**
      * Determine if there are any legal plays left on the board.
@@ -68,7 +74,12 @@ public class ElevensBoard extends Board {
      */
     @Override
     public boolean anotherPlayIsPossible() {
-        /* *** TO BE IMPLEMENTED IN ACTIVITY 9 *** */
+        List<Integer> cIndex = cardIndexes();
+        if (containsPairSum11(cIndex) || containsJQK(cIndex)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -80,7 +91,19 @@ public class ElevensBoard extends Board {
      *              contain an 11-pair; false otherwise.
      */
     private boolean containsPairSum11(List<Integer> selectedCards) {
-        /* *** TO BE IMPLEMENTED IN ACTIVITY 9 *** */
+        for (int i = 0; i < selectedCards.size(); i++) {
+            int card1 = selectedCards.get(i).intValue();
+
+            for (int j = i + 1; j < selectedCards.size(); j++) {
+                int card2 = selectedCards.get(j).intValue();
+
+                if (cardAt(card1).pointValue() + cardAt(card2).pointValue() == 11) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -92,6 +115,26 @@ public class ElevensBoard extends Board {
      *              include a jack, a queen, and a king; false otherwise.
      */
     private boolean containsJQK(List<Integer> selectedCards) {
-        /* *** TO BE IMPLEMENTED IN ACTIVITY 9 *** */
+        boolean jack = false;
+        boolean queen = false;
+        boolean king = false;
+
+        for (Integer i : selectedCards) {
+            int j = i.intValue();
+
+            if (cardAt(j).rank().equals("jack")) {
+                jack = true;
+            } else if (cardAt(j).rank().equals("queen")) {
+                queen = true;
+            } else if (cardAt(j).rank().equals("king")) {
+                king = true;
+            }
+        }
+
+        if (jack && queen && king) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
